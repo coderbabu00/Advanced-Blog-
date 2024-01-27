@@ -20,4 +20,16 @@ app.use(express.json());
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 
+//Middlewares
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || 'Something went wrong';
+
+    res.status(statusCode).json({ 
+        success: false,
+        statusCode,
+        message,
+        
+     });
+})
 app.listen(3000, () => console.log('Server started on port 3000'));
