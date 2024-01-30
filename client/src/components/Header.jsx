@@ -5,13 +5,15 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 //To check wether the user is sign in or not we will use redux toolkit's useSelector
-
+import { toggleTheme } from '../redux/theme/themeSlice';
 export default function Header() {
     const location = useLocation();
   const path = location.pathname;
   const dispatch = useDispatch();
   //To check wether the user signed in or not
   const { currentUser } = useSelector((state) => state.user);
+
+  const {theme} = useSelector((state) => state.theme);
 
   const [searchTerm, setSearchTerm] = useState('');
   return (
@@ -36,8 +38,9 @@ export default function Header() {
         <Button
           className='w-12 h-10 hidden sm:inline'
           color='gray'
-          pill>
-           <FaMoon />
+          pill onClick={() => dispatch(toggleTheme())}
+          >
+             {theme === 'light' ? <FaSun /> : <FaMoon />}
         </Button>
         {/* <Link to='/sign-in'>
             <Button gradientDuoTone='purpleToBlue' outline>
