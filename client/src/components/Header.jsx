@@ -3,10 +3,15 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+//To check wether the user is sign in or not we will use redux toolkit's useSelector
 
 export default function Header() {
     const location = useLocation();
   const path = location.pathname;
+  const dispatch = useDispatch();
+  //To check wether the user signed in or not
+  const { currentUser } = useSelector((state) => state.user);
 
   const [searchTerm, setSearchTerm] = useState('');
   return (
@@ -34,11 +39,40 @@ export default function Header() {
           pill>
            <FaMoon />
         </Button>
-        <Link to='/sign-in'>
+        {/* <Link to='/sign-in'>
             <Button gradientDuoTone='purpleToBlue' outline>
               Sign In
             </Button>
-          </Link>
+          </Link> */}
+
+{currentUser ? (
+  <Dropdown arrowIcon={false} inline={true} label={<Avatar alt="User settings" img={currentUser?.profilePicture} rounded={true} />
+  }
+  >
+    <Dropdown.Header>
+              <span className='block text-sm'>@{currentUser.username}</span>
+              <span className='block text-sm font-medium truncate'>
+                {currentUser.email}
+              </span>
+            </Dropdown.Header>
+            <Link to={'/dashboard?tab=profile'}>
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+
+            <Dropdown.Item>SignOut</Dropdown.Item>
+  </Dropdown>
+
+
+) : (
+  <Link to='/sign-in'>
+    <Button gradientDuoTone='purpleToBlue' outline>
+      Sign In
+    </Button>
+  </Link>
+)}
+
+        
           {/* For hamburger */}
           <Navbar.Toggle /> 
         </div>
